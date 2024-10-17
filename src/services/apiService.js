@@ -4,7 +4,17 @@ import { getMyPosts } from "./postService";
 const API_BASE_URL = "http://localhost:8083/event";
 
 const apiService = {
-  updateEvent: async (eventId, eventData) => {
+  updateEvent: async (eventId, title, description, startTime, endTime, location, participants, priority) => {
+    const eventData = {
+      title,
+      description,
+      startTime,
+      endTime,
+      location,
+      participants,
+      priority,
+    };
+
     try {
       const response = await axios.put(`${API_BASE_URL}/${eventId}`, eventData);
       return response.data;
@@ -24,7 +34,17 @@ const apiService = {
     }
   },
 
-  createEvent: async (eventData) => {
+  createEvent: async (title, description, startTime, endTime, location, participants, priority) => {
+    const eventData = {
+      title,
+      description,
+      startTime,
+      endTime,
+      location,
+      participants,
+      priority,
+    };
+
     try {
       const response = await axios.post(`${API_BASE_URL}/add-event`, eventData);
       return response.data;
@@ -34,28 +54,13 @@ const apiService = {
     }
   },
 
-  // getMyEvents: async () => {
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     const response = await axios.get(`${API_BASE_URL}/my-events`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Error fetching my events:", error);
-  //     throw error;
-  //   }
-  // },
-
-  getMyEvents : async () => {
+  getMyEvents: async () => {
     try {
       const response = await getMyPosts();
       return response.data;
     } catch (error) {
       console.error("Error fetching my events:", error);
-          throw error;
+      throw error;
     }
   },
 };

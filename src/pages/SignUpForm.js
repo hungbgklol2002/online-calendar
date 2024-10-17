@@ -19,6 +19,7 @@ export default function SignUpForm() {
   const [snackBarMessage, setSnackBarMessage] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [dob, setDob] = useState("");
@@ -31,6 +32,13 @@ export default function SignUpForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (password !== confirmPassword) {
+      setSnackBarMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
+      setSnackBarOpen(true);
+      return;
+    }
+
     try {
       const response = await SignUp(
         username,
@@ -43,7 +51,7 @@ export default function SignUpForm() {
       );
 
       if (response.status === 200) {
-        alert("Đăng ký thành công!");
+        setSnackBarMessage("Đăng ký thành công");
         navigate("/login");
       }
     } catch (error) {
@@ -67,24 +75,29 @@ export default function SignUpForm() {
       </Snackbar>
       <Box
         display="flex"
-        flexDirection="column"
         alignItems="center"
         justifyContent="center"
         height="100vh"
-        bgcolor={"#f0f2f5"}
+        sx={{
+          backgroundImage: "url('link_to_your_image.jpg')", // Hoặc gradient
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          padding: 2,
+        }}
       >
         <Card
           sx={{
-            minWidth: 300,
-            maxWidth: 400,
+            width: "100%",
+            maxWidth: 450,
             boxShadow: 3,
             borderRadius: 3,
             padding: 4,
+            backgroundColor: "#fff",
           }}
         >
           <CardContent>
-            <Typography variant="h5" component="h1" gutterBottom align="center">
-              Create an Account
+            <Typography variant="h5" component="h2" gutterBottom align="center" sx={{ mb: 0 }}>
+              TẠO TÀI KHOẢN
             </Typography>
             <Box
               component="form"
@@ -96,40 +109,54 @@ export default function SignUpForm() {
               onSubmit={handleSubmit}
             >
               <TextField
-                label="Username"
+                label="Tên người dùng"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                sx={{ mb: 0 }}
               />
               <TextField
-                label="Password"
+                label="Mật khẩu"
                 type="password"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                sx={{ mb: 0 }}
               />
               <TextField
-                label="Firstname"
+                label="Nhập lại mật khẩu"
+                type="password"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                sx={{ mb: 0 }}
+              />
+              <TextField
+                label="Họ"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={firstname}
                 onChange={(e) => setFirstname(e.target.value)}
+                sx={{ mb: 0 }}
               />
               <TextField
-                label="Lastname"
+                label="Tên"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={lastname}
                 onChange={(e) => setLastname(e.target.value)}
+                sx={{ mb: 0 }}
               />
               <TextField
-                label="Date of Birth"
+                label="Ngày sinh"
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -139,14 +166,16 @@ export default function SignUpForm() {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                sx={{ mb: 0 }}
               />
               <TextField
-                label="Address"
+                label="Địa chỉ"
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                sx={{ mb: 0 }}
               />
               <TextField
                 label="Email"
@@ -155,28 +184,42 @@ export default function SignUpForm() {
                 margin="normal"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                sx={{ mb: 0 }}
               />
               <Grid container spacing={2} sx={{ mt: 2 }}>
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     size="large"
                     fullWidth
+                    sx={{
+                      bgcolor: "#1976d2",
+                      '&:hover': {
+                        bgcolor: "#115293",
+                      },
+                      mb: 1,
+                    }}
                   >
-                    Sign Up
+                    TẠO TÀI KHOẢN
                   </Button>
-                </Grid>
-                <Grid item xs={6}>
                   <Button
                     variant="outlined"
                     color="primary"
                     size="large"
                     fullWidth
                     onClick={() => navigate("/login")}
+                    sx={{
+                      borderColor: "#1976d2",
+                      color: "#1976d2",
+                      '&:hover': {
+                        borderColor: "#115293",
+                        color: "#115293",
+                      },
+                    }}
                   >
-                    Back To School
+                    TRỞ VỀ TRANG ĐĂNG NHẬP
                   </Button>
                 </Grid>
               </Grid>

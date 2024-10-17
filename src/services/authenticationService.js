@@ -20,3 +20,24 @@ export const logOut = () => {
 export const isAuthenticated = () => {
   return getToken();
 };
+
+export const changePassword = async ({ oldPassword, newPassword }) => {
+  const token = getToken();
+
+  const response = await httpClient.put(
+    API.CHANGE_PASSWORD,
+    {
+      oldPassword, 
+      newPassword,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response;
+};
+
+

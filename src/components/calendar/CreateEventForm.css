@@ -1,0 +1,39 @@
+/* CreateEventForm.css */
+.create-event-modal .modal-content {
+  border-radius: 15px;
+}
+
+.create-event-modal .modal-header {
+  background-color: #f8f9fa;
+}
+
+.create-event-modal .modal-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.create-event-modal .form-control {
+  border-radius: 8px;
+}
+
+.create-event-modal .btn {
+  border-radius: 8px;
+}
+
+.create-event-modal .text-muted {
+  font-size: 0.9rem;
+}
+.create-event-modal {
+  margin-top: 30px; /* Thay đổi giá trị theo chiều cao của header */
+}
+.profile-list {
+  position: absolute;
+  z-index: 1000; /* Đảm bảo danh sách ở trên các phần tử khác */
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  max-height: 130px; /* Giới hạn chiều cao của danh sách */
+  overflow-y: auto; /* Thêm cuộn khi danh sách quá dài */
+  width: 100%; /* Chiều rộng bằng với ô nhập */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ cho danh sách */
+}

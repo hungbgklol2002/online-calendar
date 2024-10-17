@@ -1,224 +1,112 @@
-.calendar {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
 .calendar-container {
   display: flex;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+  overflow: hidden;
+  background-color: #e0f7fa; /* Màu nền nhẹ cho toàn bộ container */
 }
 
 .mini-calendar {
-  width: 220px; /* Điều chỉnh width nếu cần */
-  margin-right: 20px;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  height: 100%; /* Thêm dòng này */
-  display: flex; /* Thêm dòng này */
-  flex-direction: column; /* Thêm dòng này */
+  width: 300px;
+  height: 350px;
+  margin-right: 60px;
+  padding: 15px;
+  background-color: #fff3e0; /* Màu nền cam nhạt */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .mini-calendar h4 {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: #bf360c; /* Màu đỏ đậm cho tiêu đề */
 }
 
 .mini-days {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
-  flex-grow: 1; /* Thêm dòng này */
+  grid-template-columns: repeat(7, 1fr); /* Chia thành 7 cột đều nhau */
+  gap: 5px; /* Tăng khoảng cách giữa các ngày */
+  flex-grow: 1; /* Cho phép phần lịch phát triển theo chiều dọc */
+  box-sizing: border-box;
 }
 
 .mini-day {
   text-align: center;
   padding: 5px;
   cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+  background-color: #ffffff;
+  border: 1px solid #ddd; /* Viền nhẹ cho các ô */
 }
 
 .mini-day:hover {
-  background-color: #e0e0e0;
+  background-color: #ffcc80; /* Màu cam khi hover */
 }
 
 .mini-day.current {
-  background-color: #007bff;
-  color: white;
-  border-radius: 50%;
+  background-color: #007bff; /* Màu cho ngày hiện tại */
+  color: white; /* Màu chữ cho ngày hiện tại */
+  border-radius: 50%; /* Bo tròn ô hiện tại */
+}
+
+@media (max-width: 600px) {
+  .mini-calendar {
+    width: 100%; /* Đảm bảo tương thích với màn hình nhỏ */
+    height: auto;
+    margin-right: 0;
+  }
+
+  .mini-days {
+    grid-template-columns: repeat(7, 1fr); /* Đảm bảo chia 7 cột trên màn hình nhỏ */
+    gap: 3px; /* Giảm khoảng cách cho màn hình nhỏ */
+  }
 }
 
 .calendar {
-  flex-grow: 1;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
+  flex-grow: 1; /* Chiếm hết không gian còn lại */
+  border: 1px solid #ddd; /* Đường viền xung quanh */
+  overflow: hidden; /* Ngăn không cho nội dung tràn ra ngoài */
 }
 
+/* Styles cho header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #f8f9fa;
+  padding: 15px; /* Padding cho header */
+  background-color: #f1f1f1; /* Màu nền nhạt cho header */
   border-bottom: 1px solid #ddd;
 }
 
+/* Styles cho icons */
 .icon {
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 8px;
   user-select: none;
+  transition: background-color 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+  margin-right: 20px;
 }
 
-.view-options {
-  position: relative;
+.icon:hover {
+  background-color: #e0e0e0; /* Đổi màu khi hover */
 }
 
-.view-options > button {
-  padding: 5px 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-
-
-.days {
-  display: flex;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #ddd;
-}
-
-.col {
-  flex-grow: 1;
-  padding: 5px;
-  text-align: center;
-}
-
-.body {
-  background-color: #fff;
-}
-
-.cell {
-  min-height: 100px;
-  padding: 5px;
-  border-right: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-
-.cell:hover {
-  background-color: #f0f0f0;
-}
-
-.selected {
-  background-color: #e6f2ff;
-}
-
-.disabled {
-  color: #ccc;
-}
-
-.event {
-  padding: 2px 5px;
-  background-color: #007bff;
-  color: white;
-  border-radius: 3px;
-  margin-bottom: 2px;
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Styles for day view */
-.day-view {
-  display: flex;
-  flex-direction: column;
-}
-
-.hour-slot {
-  display: flex;
-  border-bottom: 1px solid #eee;
-  min-height: 60px;
-}
-
-.hour-label {
-  width: 60px;
-  text-align: right;
-  padding-right: 10px;
-  border-right: 1px solid #eee;
-}
-
-.hour-events {
-  flex-grow: 1;
-  padding: 5px;
-}
-
-/* Styles for week view */
-.week-view {
-  display: flex;
-}
-
-.day-column {
-  flex-grow: 1;
-  border-right: 1px solid #eee;
-}
-
-.day-header {
-  text-align: center;
-  padding: 5px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #eee;
-}
-
-/* Styles for year view */
-.year-view {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  padding: 10px;
-}
-
-.month-cell {
-  border: 1px solid #eee;
-  padding: 5px;
-  cursor: pointer;
-}
-
-.month-name {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.mini-month {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-}
-
-.mini-month .mini-day {
-  font-size: 10px;
-  padding: 2px;
-}
-
+/* Styles cho view options */
 .view-options {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 15px; /* Tăng khoảng cách trên */
 }
 
-.view-options button {
-  padding: 8px 16px;
+.view-options > button {
+  padding: 10px 20px;
   margin: 0 5px;
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: #4caf50; /* Màu xanh lá cho nút */
+  color: white;
   border: none;
   border-radius: 20px;
   cursor: pointer;
@@ -226,11 +114,143 @@
   font-size: 14px;
 }
 
-.view-options button:hover {
-  background-color: #e0e0e0;
+.view-options > button:hover {
+  background-color: #388e3c; /* Màu xanh lá đậm khi hover */
 }
 
-.view-options button.active {
-  background-color: #007bff;
-  color: white;
+.view-options > button.active {
+  background-color: #007bff; /* Màu cho nút đang hoạt động */
+  color: white; /* Màu chữ cho nút đang hoạt động */
+}
+
+/* Các styles cho body */
+.body {
+  background-color: #fff;
+}
+
+.cell {
+  min-height: 100px;
+  padding: 10px; /* Tăng padding cho các ô */
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+.cell:hover {
+  background-color: #f1f1f1; /* Đổi màu khi hover */
+}
+
+.selected {
+  background-color: #e6f2ff; /* Màu nền cho ô được chọn */
+}
+
+.disabled {
+  color: #ccc; /* Màu cho các ô không hoạt động */
+}
+
+.event {
+  padding: 5px; /* Tăng padding cho sự kiện */
+  background-color: #ff5722; /* Màu nền cho sự kiện */
+  color: white; /* Màu chữ cho sự kiện */
+  border-radius: 5px; /* Đổi góc cho sự kiện */
+  margin-bottom: 2px;
+  font-size: 12px; /* Kích thước chữ cho sự kiện */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Ngăn dòng sự kiện không xuống dòng */
+}
+
+/* Styles cho day view */
+.day-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.hour-slot {
+  display: flex;
+  border-bottom: 1px solid #eee; /* Đường viền dưới cho giờ */
+  min-height: 60px; /* Chiều cao tối thiểu cho slot giờ */
+}
+
+.hour-label {
+  width: 60px; /* Chiều rộng cho nhãn giờ */
+  text-align: right; /* Căn phải chữ cho nhãn giờ */
+  padding-right: 10px; /* Padding bên phải cho nhãn giờ */
+  border-right: 1px solid #eee; /* Đường viền bên phải cho nhãn giờ */
+}
+
+.hour-events {
+  flex-grow: 1; /* Chiếm hết không gian còn lại */
+  padding: 5px; /* Padding cho sự kiện giờ */
+}
+
+/* Styles cho week view */
+.week-view {
+  display: flex; /* Hiển thị dạng flex cho tuần */
+}
+
+.day-column {
+  flex-grow: 1; /* Chiếm hết không gian còn lại */
+  border-right: 1px solid #eee; /* Đường viền bên phải cho cột ngày */
+}
+
+.day-header {
+  text-align: center; /* Căn giữa tiêu đề ngày */
+  padding: 8px; /* Tăng padding cho tiêu đề ngày */
+  background-color: #f8f9fa; /* Màu nền cho tiêu đề ngày */
+  border-bottom: 1px solid #eee; /* Đường viền dưới cho tiêu đề ngày */
+}
+
+/* Styles cho year view */
+.year-view {
+  display: grid; /* Hiển thị dạng grid cho năm */
+  grid-template-columns: repeat(4, 1fr); /* Chia thành 4 cột */
+  gap: 15px; /* Tăng khoảng cách giữa các tháng */
+  padding: 15px; /* Tăng padding cho năm */
+}
+
+.month-cell {
+  border: 1px solid #eee; /* Đường viền cho ô tháng */
+  padding: 10px; /* Tăng padding cho ô tháng */
+  cursor: pointer; /* Hiển thị con trỏ khi hover */
+  transition: background-color 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+  background-color: #c3dcf6;
+}
+
+.month-cell:hover {
+  background-color: #b2e0ff; /* Đổi màu khi hover */
+}
+
+.month-name {
+  text-align: center; /* Căn giữa tên tháng */
+  font-weight: bold; /* Đặt chữ đậm cho tên tháng */
+  margin-bottom: 8px; /* Tăng khoảng cách dưới cho tên tháng */
+}
+
+.mini-month {
+  display: grid; /* Hiển thị dạng grid cho tháng nhỏ */
+  grid-template-columns: repeat(7, 1fr); /* Chia thành 7 cột cho tuần */
+  gap: 2px; /* Khoảng cách giữa các ô ngày */
+}
+
+.mini-month .mini-day {
+  font-size: 10px; /* Kích thước chữ cho các ngày mini */
+  padding: 5px; /* Tăng padding cho các ngày mini */
+  border-radius: 4px; /* Thêm độ cong cho ô ngày */
+  transition: background-color 0.3s; /* Thêm hiệu ứng chuyển tiếp */
+}
+
+.mini-month .mini-day:hover {
+  background-color: #e1e1e1; /* Đổi màu khi hover trên ô ngày mini */
+}
+
+.selected {
+  background-color: #bbdefb; /* Màu xanh nhạt cho ô đã chọn */
+}
+
+.col-end {
+  display: flex; /* Sử dụng flexbox */
+  justify-content: flex-end; /* Đưa nội dung sang bên phải */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  padding: 10px; /* Tăng padding cho cột cuối */
 }

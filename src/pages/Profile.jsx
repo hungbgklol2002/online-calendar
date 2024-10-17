@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Card, CircularProgress, Typography } from "@mui/material";
+import { Box, Card, CircularProgress, Typography, Button } from "@mui/material";
 import { getMyInfo } from "../services/userService";
-import { isAuthenticated } from "../services/authenticationService";
+import { isAuthenticated, logOut } from "../services/authenticationService";
+import ChangePassword from "../components/ChangePassword"; // Import ChangePassword component
 import Scene from "./Scene";
-import { logOut } from "../services/authenticationService";
 
 export default function Profile() {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({});
+  const [showChangePassword, setShowChangePassword] = useState(false); // State to toggle Change Password form
 
   const getUserDetails = async () => {
     try {
@@ -32,6 +33,11 @@ export default function Profile() {
     }
   }, [navigate]);
 
+  // Function to handle Change Password toggle
+  const handleChangePassword = () => {
+    setShowChangePassword(!showChangePassword); // Toggle the visibility of the form
+  };
+
   return (
     <Scene>
       {userDetails ? (
@@ -41,126 +47,73 @@ export default function Profile() {
             maxWidth: 500,
             boxShadow: 3,
             borderRadius: 2,
-            padding: 4,
+            padding: 3,
+            margin: "20px auto",
+            backgroundColor: "#fff",
+            transition: "0.3s",
+            "&:hover": {
+              boxShadow: 6,
+            },
           }}
         >
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 3,
+              textAlign: "center",
+              fontWeight: "bold",
+              color: "#1976d2",
+            }}
+          >
+            Thông tin người dùng
+          </Typography>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
-              width: "100%",
-              gap: "10px",
+              gap: 2,
+              padding: 2,
             }}
           >
-            <Typography
+            {[ 
+              { label: "Profile ID:", value: userDetails.profileID },
+              { label: "Họ:", value: userDetails.firstName },
+              { label: "Tên:", value: userDetails.lastName },
+              { label: "Ngày sinh:", value: userDetails.dob },
+            ].map((field, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderBottom: "1px solid #ccc",
+                  paddingBottom: 1,
+                  color: "#333",
+                }}
+              >
+                <Typography fontWeight="600" color="#555">{field.label}</Typography>
+                <Typography color="#333">{field.value}</Typography>
+              </Box>
+            ))}
+
+            {/* Add Change Password Button */}
+            <Button
+              variant="contained"
+              color="primary"
               sx={{
-                fontSize: 18,
-                mb: "40px",
+                mt: 3,
+                borderRadius: 5,
+                padding: '10px 20px',
+                textTransform: 'none',
               }}
+              onClick={handleChangePassword}
             >
-              Welcome back to Devteria, {userDetails.username} !
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                width: "100%", // Ensure content takes full width
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                }}
-              >
-                Profile ID
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                }}
-              >
-                {userDetails.profileID}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                width: "100%", // Ensure content takes full width
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                }}
-              >
-                First Name
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                }}
-              >
-                {userDetails.firstName}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                width: "100%", // Ensure content takes full width
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                }}
-              >
-                Last Name
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                }}
-              >
-                {userDetails.lastName}
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                width: "100%", // Ensure content takes full width
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 600,
-                }}
-              >
-                Date of birth
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                }}
-              >
-                {userDetails.dob}
-              </Typography>
-            </Box>
+              Đổi mật khẩu
+            </Button>
+
+            {/* Conditionally render Change Password form */}
+            {showChangePassword && <ChangePassword />} {/* Show Change Password form */}
           </Box>
         </Card>
       ) : (
@@ -174,7 +127,7 @@ export default function Profile() {
             height: "100vh",
           }}
         >
-          <CircularProgress></CircularProgress>
+          <CircularProgress />
           <Typography>Loading ...</Typography>
         </Box>
       )}

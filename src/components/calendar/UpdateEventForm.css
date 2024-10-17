@@ -1,0 +1,41 @@
+/* UpdateEventForm.css */
+.update-event-modal .modal-content {
+  border-radius: 15px; /* Bo tròn góc cho modal */
+}
+
+.update-event-modal .modal-header {
+  background-color: #f8f9fa; /* Màu nền cho tiêu đề modal */
+}
+
+.update-event-modal .modal-title {
+  font-weight: bold; /* Chữ đậm cho tiêu đề */
+  font-size: 1.5rem; /* Kích thước chữ cho tiêu đề */
+}
+
+.update-event-modal .form-control {
+  border-radius: 8px; /* Bo tròn góc cho các trường nhập */
+}
+
+.update-event-modal .btn {
+  border-radius: 8px; /* Bo tròn góc cho nút bấm */
+}
+
+.update-event-modal .text-muted {
+  font-size: 0.9rem; /* Kích thước chữ cho các thông báo */
+}
+
+.update-event-modal {
+  margin-top: 30px; /* Khoảng cách phía trên modal */
+}
+
+.profile-list {
+  position: absolute; /* Đặt vị trí tuyệt đối cho danh sách người tham gia */
+  z-index: 1000; /* Đảm bảo danh sách ở trên các phần tử khác */
+  background-color: white; /* Màu nền cho danh sách */
+  border: 1px solid #ced4da; /* Đường viền cho danh sách */
+  border-radius: 0.25rem; /* Bo tròn góc cho danh sách */
+  max-height: 130px; /* Giới hạn chiều cao của danh sách */
+  overflow-y: auto; /* Thêm cuộn khi danh sách quá dài */
+  width: 100%; /* Chiều rộng bằng với ô nhập */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ cho danh sách */
+}

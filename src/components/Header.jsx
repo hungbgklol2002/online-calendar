@@ -11,7 +11,20 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { logOut } from "../services/authenticationService";
+import { Client } from "@stomp/stompjs";
+
+// Styled components using MUI
+const CustomMenuItem = styled(MenuItem)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  color: theme.palette.text.primary,
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.primary.main, 0.1),
+  },
+}));
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -43,7 +56,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -56,62 +68,86 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function Header() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [notificationCount, setNotificationCount] = React.useState(0);
+  const [notifications, setNotifications] = React.useState([]);
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  // Setup WebSocket client
+  const client = React.useMemo(() => {
+    const stompClient = new Client({
+      brokerURL: "ws://localhost:8082/ws-notifications", // Sửa URL để khớp với endpoint WebSocket của bạn
+      onConnect: () => {
+        console.log("Connected to WebSocket");
+        stompClient.subscribe("/topic/notifications", (message) => {
+          const notification = JSON.parse(message.body);
+          setNotifications((prev) => [...prev, notification]);
+          setNotificationCount((prev) => prev + 1);
+        });
+      },
+      onWebSocketError: (error) => {
+        console.error("WebSocket error:", error);
+      },
+    });
+    return stompClient;
+  }, []);
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // Activate WebSocket on mount, deactivate on unmount
+  React.useEffect(() => {
+    client.activate();
+    return () => client.deactivate();
+  }, [client]);
 
-  const handleMobileMenuClose = () => {
+  // Menu handlers
+  const handleProfileMenuOpen = (event) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
     setMobileMoreAnchorEl(null);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleOpenProfile = () => {
-    setAnchorEl(null);
-    window.location.href = "/profile";
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const handleLogout = (event) => {
+  const handleMobileMenuOpen = (event) => setMobileMoreAnchorEl(event.currentTarget);
+  const handleLogout = () => {
     handleMenuClose();
     logOut();
     window.location.href = "/login";
   };
 
-  const menuId = "primary-search-account-menu";
+  const handleNotificationClick = () => {
+    setNotifications([]);
+    setNotificationCount(0);
+  };
+ 
+  // Render the main menu
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
       anchorOrigin={{
-        vertical: "top",
+        vertical: "bottom",
         horizontal: "right",
       }}
-      id={menuId}
+      id="primary-search-account-menu"
       keepMounted
       transformOrigin={{
         vertical: "top",
         horizontal: "right",
       }}
-      open={isMenuOpen}
+      open={Boolean(anchorEl)}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleOpenProfile}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Settings</MenuItem>
-      <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+      <CustomMenuItem onClick={() => window.location.href = "/profile"}>
+        <AccountCircle sx={{ marginRight: 1 }} />
+        Thông tin cá nhân
+      </CustomMenuItem>
+      <CustomMenuItem>
+        <SettingsIcon sx={{ marginRight: 1 }} />
+        Cài đặt
+      </CustomMenuItem>
+      <CustomMenuItem onClick={handleLogout}>
+        <ExitToAppIcon sx={{ marginRight: 1 }} />
+        Đăng xuất
+      </CustomMenuItem>
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
+  // Render mobile menu
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -119,69 +155,53 @@ export default function Header() {
         vertical: "top",
         horizontal: "right",
       }}
-      id={mobileMenuId}
+      id="primary-search-account-menu-mobile"
       keepMounted
       transformOrigin={{
         vertical: "top",
         horizontal: "right",
       }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      open={Boolean(mobileMoreAnchorEl)}
+      onClose={handleMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 2 new mails" color="inherit">
+        <IconButton size="large" color="inherit">
           <Badge badgeContent={2} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>Tin nhắn</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 4 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={4} color="error">
+      <MenuItem onClick={handleNotificationClick}>
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={notificationCount} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p>Thông báo</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton size="large" color="inherit">
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>Cá nhân</p>
       </MenuItem>
     </Menu>
   );
 
   return (
     <>
-      <IconButton
-        size="large"
-        edge="start"
-        color="inherit"
-        aria-label="open drawer"
-        sx={{ mr: 2 }}
-        onClick={() => (window.location.href = "/calendar")}
-      >
+      <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }} onClick={() => window.location.href = "/calendar"}>
         <Box
-          component={"img"}
-          style={{
+          component="img"
+          sx={{
             width: "35px",
             height: "35px",
             borderRadius: 6,
           }}
-          src="/logo/devteria-logo.png"
-        ></Box>
+          src="/logo/abc.jpg"
+          alt="Logo"
+        />
       </IconButton>
       <Search>
         <SearchIconWrapper>
@@ -194,41 +214,22 @@ export default function Header() {
       </Search>
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+        <IconButton size="large" color="inherit">
+          <Badge badgeContent={2} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
+        <IconButton size="large" color="inherit" onClick={handleNotificationClick}>
+          <Badge badgeContent={notificationCount} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <IconButton
-          size="large"
-          edge="end"
-          aria-label="account of current user"
-          aria-controls={menuId}
-          aria-haspopup="true"
-          onClick={handleProfileMenuOpen}
-          color="inherit"
-        >
+        <IconButton size="large" color="inherit" onClick={handleProfileMenuOpen}>
           <AccountCircle />
         </IconButton>
       </Box>
       <Box sx={{ display: { xs: "flex", md: "none" } }}>
-        <IconButton
-          size="large"
-          aria-label="show more"
-          aria-controls={mobileMenuId}
-          aria-haspopup="true"
-          onClick={handleMobileMenuOpen}
-          color="inherit"
-        >
+        <IconButton size="large" color="inherit" onClick={handleMobileMenuOpen}>
           <MoreIcon />
         </IconButton>
       </Box>

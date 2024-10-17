@@ -6,7 +6,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
-import HomeIcon from "@mui/icons-material/Home";
+import EventIcon from '@mui/icons-material/Event';
 import PeopleIcon from "@mui/icons-material/People";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { Link } from "react-router-dom";
@@ -19,36 +19,15 @@ function SideMenu() {
         <ListItem key={"home"} disablePadding>
           <ListItemButton component={Link} to="/">
             <ListItemIcon>
-              <HomeIcon />
+              <EventIcon />
             </ListItemIcon>
             <ListItemText
-              primary={"Home"}
+              primary={"Sự kiện của tôi"}
               primaryTypographyProps={{ style: { fontWeight: "bold" } }}
             />
           </ListItemButton>
         </ListItem>
-        <ListItem key={"friends"} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <PeopleIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={"Friends"}
-              primaryTypographyProps={{ style: { fontWeight: "bold" } }}
-            />
-          </ListItemButton>
-        </ListItem>
-        <ListItem key={"groups"} disablePadding>
-          <ListItemButton>
-            <ListItemIcon>
-              <GroupsIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={"Groups"}
-              primaryTypographyProps={{ style: { fontWeight: "bold" } }}
-            />
-          </ListItemButton>
-        </ListItem>
+        
       </List>
       <Divider />
     </>
